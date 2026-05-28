@@ -512,7 +512,18 @@
     <div class="container">
       <h2 class="section-title">BMI 계산기</h2>
       <div class="calculator">
-        <h3>당신의 체질량지수를 확인해보세요</h3>
+        <h3>당신의 체질량지수와 매칭 이성을 확인해보세요</h3>
+        <div class="form-group">
+          <label>성별</label>
+          <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="radio" name="gender" value="male" checked style="width: auto;"> 남성
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="radio" name="gender" value="female" style="width: auto;"> 여성
+            </label>
+          </div>
+        </div>
         <div class="form-group">
           <label for="height">키 (cm)</label>
           <input type="number" id="height" placeholder="예: 170">
@@ -521,7 +532,7 @@
           <label for="weight">몸무게 (kg)</label>
           <input type="number" id="weight" placeholder="예: 65">
         </div>
-        <button class="calc-btn" onclick="calculateBMI()">BMI 계산하기</button>
+        <button class="calc-btn" onclick="calculateBMI()">BMI 계산 및 이성 매칭</button>
         <div class="result" id="result"></div>
       </div>
     </div>
@@ -608,6 +619,7 @@
     function calculateBMI() {
       const height = parseFloat(document.getElementById('height').value) / 100;
       const weight = parseFloat(document.getElementById('weight').value);
+      const gender = document.querySelector('input[name="gender"]:checked').value;
       const resultDiv = document.getElementById('result');
 
       if (!height || !weight || height <= 0 || weight <= 0) {
@@ -619,6 +631,8 @@
       const bmi = (weight / (height * height)).toFixed(1);
       let category = '';
       let emoji = '';
+      let partnerImg = '';
+      let partnerDesc = '';
 
       if (bmi < 18.5) {
         category = '저체중';
@@ -637,10 +651,25 @@
         emoji = '🚨';
       }
 
+      // 매칭 이성 설정 (Unsplash 이미지 키워드 활용)
+      if (gender === 'male') {
+        // 남성이면 여성 파트너 추천
+        partnerImg = `https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=400&h=400&fit=crop&q=80`;
+        partnerDesc = '건강한 에너지의 운동 파트너';
+      } else {
+        // 여성이면 남성 파트너 추천
+        partnerImg = `https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&q=80`;
+        partnerDesc = '든든하고 자기관리가 철저한 파트너';
+      }
+
       resultDiv.innerHTML = `
         <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">${emoji}</div>
         <div>당신의 BMI: <strong style="font-size: 1.5rem;">${bmi}</strong></div>
         <div style="margin-top: 0.5rem;">분류: <strong>${category}</strong></div>
+        <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid rgba(255,255,255,0.3);">
+        <div style="font-weight: bold; margin-bottom: 1rem;">✨ 당신과 어울리는 건강한 파트너 매칭</div>
+        <img src="${partnerImg}" alt="Matching Partner" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #ffd700; margin-bottom: 0.5rem;">
+        <div style="font-size: 0.9rem; opacity: 0.9;">${partnerDesc}</div>
       `;
       resultDiv.classList.add('show');
     }
