@@ -633,43 +633,70 @@
       let emoji = '';
       let partnerImg = '';
       let partnerDesc = '';
+      let motivation = '';
+      let score = 0;
 
       if (bmi < 18.5) {
         category = '저체중';
         emoji = '📉';
+        score = 65;
+        motivation = '근력 운동을 통해 조금 더 탄탄한 몸을 만들면, 이 파트너와 함께 액티브한 활동을 즐기기에 최고일 거예요!';
       } else if (bmi < 23) {
         category = '정상 체중';
         emoji = '✅';
+        score = 98;
+        motivation = '완벽한 매칭! 지금의 건강한 밸런스를 유지하며 파트너와 함께 아침 조깅을 시작해보는 건 어떨까요?';
       } else if (bmi < 25) {
         category = '과체중';
         emoji = '⚠️';
+        score = 80;
+        motivation = '조금만 더 식단과 운동에 신경 쓰면, 이 파트너와 함께 해변을 달리는 꿈이 현실이 될 수 있습니다!';
       } else if (bmi < 30) {
         category = '비만 1단계';
         emoji = '🔴';
+        score = 60;
+        motivation = '이 파트너는 자기관리가 철저한 사람에게 큰 매력을 느낍니다. 오늘부터 30분 걷기부터 시작해볼까요?';
       } else {
         category = '비만 2단계 이상';
         emoji = '🚨';
+        score = 45;
+        motivation = '새로운 인생의 전환점이 필요합니다. 더 건강한 당신을 기다리는 이 파트너를 생각하며 힘내보세요!';
       }
 
-      // 매칭 이성 설정 (Unsplash 이미지 키워드 활용)
+      // 매칭 이성 설정 (Unsplash 고화질 피트니스 이미지)
       if (gender === 'male') {
-        // 남성이면 여성 파트너 추천
-        partnerImg = `https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=400&h=400&fit=crop&q=80`;
-        partnerDesc = '건강한 에너지의 운동 파트너';
+        // 남성이면 여성 파트너 추천 (요가/운동하는 건강한 여성)
+        partnerImg = `https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&h=500&fit=crop&q=80`;
+        partnerDesc = '매일 아침 요가와 러닝을 즐기는 활발한 파트너';
       } else {
-        // 여성이면 남성 파트너 추천
-        partnerImg = `https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&q=80`;
-        partnerDesc = '든든하고 자기관리가 철저한 파트너';
+        // 여성이면 남성 파트너 추천 (자기관리가 철저한 운동하는 남성)
+        partnerImg = `https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&h=500&fit=crop&q=80`;
+        partnerDesc = '철저한 식단과 웨이트 트레이닝으로 다져진 든든한 파트너';
       }
 
       resultDiv.innerHTML = `
         <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">${emoji}</div>
         <div>당신의 BMI: <strong style="font-size: 1.5rem;">${bmi}</strong></div>
         <div style="margin-top: 0.5rem;">분류: <strong>${category}</strong></div>
-        <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid rgba(255,255,255,0.3);">
-        <div style="font-weight: bold; margin-bottom: 1rem;">✨ 당신과 어울리는 건강한 파트너 매칭</div>
-        <img src="${partnerImg}" alt="Matching Partner" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #ffd700; margin-bottom: 0.5rem;">
-        <div style="font-size: 0.9rem; opacity: 0.9;">${partnerDesc}</div>
+        
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px dashed rgba(255,255,255,0.3);">
+          <div style="font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem; color: #ffd700;">
+            🔥 AI 라이프스타일 매칭 결과
+          </div>
+          <div style="position: relative; display: inline-block; margin-bottom: 1rem;">
+            <img src="${partnerImg}" alt="Matching Partner" style="width: 200px; height: 200px; border-radius: 20px; object-fit: cover; border: 5px solid rgba(255,215,0,0.5); box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+            <div style="position: absolute; bottom: 10px; right: -10px; background: #e94560; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
+              매칭률 ${score}%
+            </div>
+          </div>
+          <div style="font-weight: bold; margin-bottom: 0.5rem;">"${partnerDesc}"</div>
+          <p style="font-size: 0.95rem; line-height: 1.5; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px; margin-top: 1rem;">
+            ${motivation}
+          </p>
+          <div style="margin-top: 1rem; font-size: 0.85rem; color: #ffd700; font-style: italic;">
+            * 이 파트너는 당신과 함께 운동할 준비가 되어 있습니다!
+          </div>
+        </div>
       `;
       resultDiv.classList.add('show');
     }
