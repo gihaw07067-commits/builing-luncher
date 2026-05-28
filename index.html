@@ -472,47 +472,59 @@
       
       if (type === 'standard') {
         const bmi = data.bmi;
-        // 한국인 평균 BMI 약 23.5, 표준편차 3.5 기반의 정규분포 모델
-        // 정상 범주(22~23)에서 가장 높은 점수를 받도록 설계
+        // 한국인 표준 BMI 22.5 기준 정규분포 모델
         const diff = Math.abs(bmi - 22.5);
         if (bmi < 18.5) {
-          // 저체중 영역
-          percentile = 70 + (18.5 - bmi) * 5;
+          // 저체중 (표준에서 멀어질수록 순위 하락)
+          percentile = 60 + (18.5 - bmi) * 10;
         } else if (bmi <= 25) {
-          // 정상 및 과체중 경계 (가장 경쟁 치열한 상위권)
-          percentile = 1 + (diff * 15); 
+          // 정상 및 과체중 경계 (22.5에 가까울수록 상위권)
+          percentile = 1 + (diff * 12); 
         } else {
-          // 비만 영역
-          percentile = 40 + (bmi - 25) * 8;
+          // 비만 (표준에서 멀어질수록 순위 하락)
+          percentile = 35 + (bmi - 25) * 8;
         }
       } else {
         // 인바디 점수 모델 (골격근량/체지방률 복합)
-        // 남성: 골격근량 45% 이상, 체지방 15% 이하가 상위권 가정
-        // 여성: 골격근량 35% 이상, 체지방 22% 이하가 상위권 가정
-        const muscleRatio = (data.muscle / (data.weight || 70)) * 100;
+        const muscleRatio = (data.muscle / (parseFloat(document.getElementById('std-weight')?.value) || 70)) * 100;
         const targetMuscle = data.gender === 'male' ? 45 : 35;
         const targetFat = data.gender === 'male' ? 15 : 22;
         
-        const muscleScore = Math.max(0, 100 - Math.abs(muscleRatio - targetMuscle) * 4);
-        const fatScore = Math.max(0, 100 - Math.abs(data.fat - targetFat) * 3);
+        // 골격근량: 목표치보다 높을수록 좋음 (페널티 없음)
+        let muscleScore = 100;
+        if (muscleRatio < targetMuscle) {
+          muscleScore = Math.max(0, 100 - (targetMuscle - muscleRatio) * 5);
+        } else {
+          // 초과 달성 시 가산점
+          muscleScore = 100 + (muscleRatio - targetMuscle) * 2;
+        }
+
+        // 체지방률: 목표치보다 낮을수록 좋음 (페널티 없음)
+        let fatScore = 100;
+        if (data.fat > targetFat) {
+          fatScore = Math.max(0, 100 - (data.fat - targetFat) * 4);
+        } else {
+          // 초과 달성 시 가산점
+          fatScore = 100 + (targetFat - data.fat) * 2;
+        }
+
         const totalScore = (muscleScore * 0.6) + (fatScore * 0.4);
-        
-        percentile = 100 - totalScore;
+        // 점수가 높을수록 상위 퍼센트는 낮아짐 (Top 1% 등)
+        percentile = Math.max(0.01, 100 - (totalScore / 1.2)); 
       }
 
-      // 연령대별 보정 (나이가 많을수록 같은 스펙에서 상위권)
-      const ageBonus = { '20': 1.0, '30': 0.95, '40': 0.85, '50': 0.75 };
+      // 연령대별 보정 (나이가 많을수록 같은 스펙에서 더 높은 평가)
+      const ageBonus = { '20': 1.0, '30': 0.9, '40': 0.8, '50': 0.7 };
       percentile = percentile * (ageBonus[data.age] || 1.0);
       
-      // 변동성 최소화 (동일 값 입력 시 일관성 유지)
-      // 시드값(bmi 또는 근육량 등)을 활용한 고정형 미세 변동
-      const seed = type === 'standard' ? data.bmi : data.muscle + data.fat;
-      const staticVolatility = (Math.sin(seed * 1000) + 1) / 10; // 0~0.2 사이 고정값
+      // 변동성 제어 (고정 시드 기반 미세 변동으로 일관성 유지)
+      const seed = type === 'standard' ? data.bmi : (data.muscle * 10) + data.fat;
+      const staticVolatility = (Math.sin(seed) + 1) / 5; // 0~0.4 사이 고정값
       percentile += staticVolatility;
 
       percentile = Math.min(Math.max(percentile, 0.01), 99.9);
       
-      // 전국 추정 순위 (해당 연령대/성별 인구수 비례 - 약 300만명 단위)
+      // 전국 추정 순위 (인구 통계 기반)
       const subgroupPopulation = 3200000; 
       const rank = Math.floor(subgroupPopulation * (percentile / 100));
 
