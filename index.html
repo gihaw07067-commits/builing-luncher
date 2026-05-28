@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitLife - 건강한 라이프스타일</title>
+  <style>
+    :root {
+      --bg-color: #f5f7fa;
+      --text-color: #333;
+      --card-bg: white;
+      --header-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --hero-overlay: rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8);
+      --section-title: #333;
+      --tip-card-bg: #f8f9ff;
+      --calc-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --footer-bg: #2c3e50;
+      --shadow: 0 5px 15px rgba(0,0,0,0.08);
+      --nav-bg: transparent;
+    }
+
+    [data-theme='dark'] {
+      --bg-color: #1a1a2e;
+      --text-color: #e0e0e0;
+      --card-bg: #16213e;
+      --header-gradient: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+      --hero-overlay: rgba(15, 52, 96, 0.8), rgba(26, 26, 46, 0.8);
+      --section-title: #fff;
+      --tip-card-bg: #0f3460;
+      --calc-bg: linear-gradient(135deg, #0f3460 0%, #e94560 100%);
+      --footer-bg: #0a0a1a;
+      --shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background: var(--bg-color);
+    }
+
+    /* 헤더 */
+    header {
+      background: var(--header-gradient);
+      color: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .logo span {
+      color: #ffd700;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #ffd700;
+    }
+
+    /* 테마 토글 버튼 */
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* 히어로 섹션 */
+    .hero {
+      background: linear-gradient(var(--hero-overlay)),
+                  url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1600') center/cover;
+      color: white;
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #ffd700;
+      color: #333;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    /* 섹션 공통 */
+    section {
+      padding: 4rem 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      color: var(--section-title);
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin: 1rem auto;
+      border-radius: 2px;
+    }
+
+    /* 카테고리 카드 */
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .category-card {
+      background: var(--card-bg);
+      padding: 2.5rem 2rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .category-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .category-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .category-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #667eea;
+    }
+
+    /* 운동 팁 섹션 */
+    .tips-section {
+      background: var(--card-bg);
+    }
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .tip-card {
+      background: var(--tip-card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      border-left: 5px solid #667eea;
+    }
+
+    .tip-card h4 {
+      color: #764ba2;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .tip-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .tip-card li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .tip-card li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    /* BMI 계산기 */
+    .calculator {
+      background: var(--calc-bg);
+      color: white;
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .calculator h3 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .calc-btn {
+      width: 100%;
+      background: #ffd700;
+      color: #333;
+      border: none;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .calc-btn:hover {
+      transform: scale(1.02);
+    }
+
+    .result {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.2rem;
+      display: none;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    /* 영양 정보 */
+    .nutrition-section {
+      background: var(--bg-color);
+    }
+
+    .nutrition-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .nutrition-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .nutrition-card .emoji {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .nutrition-card h4 {
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+
+    /* 푸터 */
+    footer {
+      background: var(--footer-bg);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    footer p {
+      margin: 0.5rem 0;
+    }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <!-- 헤더 -->
+  <header>
+    <nav>
+      <div class="logo">Fit<span>Life</span> 💪</div>
+      <div class="nav-container">
+        <ul class="nav-links">
+          <li><a href="#home">홈</a></li>
+          <li><a href="#categories">카테고리</a></li>
+          <li><a href="#tips">운동팁</a></li>
+          <li><a href="#bmi">BMI 계산</a></li>
+          <li><a href="#nutrition">영양정보</a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle">
+          <span class="theme-icon">🌙</span>
+          <span class="theme-text">다크 모드</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- 히어로 -->
+  <section class="hero" id="home">
+    <h1>건강한 삶의 시작, FitLife</h1>
+    <p>과학적이고 검증된 건강 정보로 당신의 라이프스타일을 변화시켜보세요. 오늘부터 더 나은 내일을 만들어갑니다.</p>
+    <a href="#categories" class="btn">시작하기 →</a>
+  </section>
+
+  <!-- 카테고리 -->
+  <section id="categories">
+    <div class="container">
+      <h2 class="section-title">건강 카테고리</h2>
+      <div class="categories">
+        <div class="category-card">
+          <div class="category-icon">🏋️</div>
+          <h3>근력 운동</h3>
+          <p>체계적인 웨이트 트레이닝으로 강한 몸을 만들어보세요.</p>
+        </div>
+        <div class="category-card">
+          <div class="category-icon">🏃</div>
+          <h3>유산소 운동</h3>
+          <p>심폐지구력 향상과 체지방 감량을 위한 유산소 가이드.</p>
+        </div>
+        <div class="category-card">
+          <div class="category-icon">🧘</div>
+          <h3>요가 & 스트레칭</h3>
+          <p>유연성과 마음의 평화를 동시에 얻는 운동법.</p>
+        </div>
+        <div class="category-card">
+          <div class="category-icon">🥗</div>
+          <h3>영양 관리</h3>
+          <p>균형 잡힌 식단으로 건강을 챙기는 방법.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 운동 팁 -->
+  <section class="tips-section" id="tips">
+    <div class="container">
+      <h2 class="section-title">운동 핵심 팁</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <h4>🔥 초보자를 위한 가이드</h4>
+          <ul>
+            <li>주 3회, 30분부터 시작하기</li>
+            <li>충분한 워밍업과 쿨다운</li>
+            <li>올바른 자세를 우선시할 것</li>
+            <li>점진적으로 강도 높이기</li>
+          </ul>
+        </div>
+        <div class="tip-card">
+          <h4>💪 근력 향상의 비밀</h4>
+          <ul>
+            <li>복합 운동(스쿼트, 데드리프트) 활용</li>
+            <li>점진적 과부하 원칙 적용</li>
+            <li>충분한 단백질 섭취 (체중 1kg당 1.6~2g)</li>
+            <li>주 2회 이상 같은 부위 자극</li>
+          </ul>
+        </div>
+        <div class="tip-card">
+          <h4>🏃‍♂️ 효과적인 다이어트</h4>
+          <ul>
+            <li>유산소 + 근력 운동 병행</li>
+            <li>하루 칼로리 10~20% 감량</li>
+            <li>충분한 수면 (7~8시간)</li>
+            <li>물 하루 2L 이상 마시기</li>
+          </ul>
+        </div>
+        <div class="tip-card">
+          <h4>😴 회복의 중요성</h4>
+          <ul>
+            <li>운동 후 48시간 휴식 필요</li>
+            <li>스트레칭으로 근육 이완</li>
+            <li>마사지 및 폼롤링 활용</li>
+            <li>스트레스 관리도 회복의 일부</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BMI 계산기 -->
+  <section id="bmi">
+    <div class="container">
+      <h2 class="section-title">BMI 계산기</h2>
+      <div class="calculator">
+        <h3>당신의 체질량지수를 확인해보세요</h3>
+        <div class="form-group">
+          <label for="height">키 (cm)</label>
+          <input type="number" id="height" placeholder="예: 170">
+        </div>
+        <div class="form-group">
+          <label for="weight">몸무게 (kg)</label>
+          <input type="number" id="weight" placeholder="예: 65">
+        </div>
+        <button class="calc-btn" onclick="calculateBMI()">BMI 계산하기</button>
+        <div class="result" id="result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 영양 정보 -->
+  <section class="nutrition-section" id="nutrition">
+    <div class="container">
+      <h2 class="section-title">필수 영양소 가이드</h2>
+      <div class="nutrition-grid">
+        <div class="nutrition-card">
+          <div class="emoji">🍗</div>
+          <h4>단백질</h4>
+          <p>근육 형성과 회복의 핵심. 닭가슴살, 계란, 두부 추천.</p>
+        </div>
+        <div class="nutrition-card">
+          <div class="emoji">🍚</div>
+          <h4>탄수화물</h4>
+          <p>운동 에너지원. 현미, 고구마, 귀리 등 복합 탄수화물 섭취.</p>
+        </div>
+        <div class="nutrition-card">
+          <div class="emoji">🥑</div>
+          <h4>건강한 지방</h4>
+          <p>호르몬 균형에 필수. 아보카도, 견과류, 올리브오일 활용.</p>
+        </div>
+        <div class="nutrition-card">
+          <div class="emoji">🥦</div>
+          <h4>비타민 & 미네랄</h4>
+          <p>면역력과 신진대사. 다양한 채소와 과일 섭취 필수.</p>
+        </div>
+        <div class="nutrition-card">
+          <div class="emoji">💧</div>
+          <h4>수분</h4>
+          <p>대사 활동의 기본. 하루 1.5~2L의 물 섭취 권장.</p>
+        </div>
+        <div class="nutrition-card">
+          <div class="emoji">🌾</div>
+          <h4>식이섬유</h4>
+          <p>장 건강의 수호자. 채소, 통곡물, 콩류로 충분히 섭취.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer>
+    <p><strong>FitLife</strong> - 당신의 건강한 라이프스타일 파트너</p>
+    <p>📧 contact@fitlife.com | 📞 02-1234-5678</p>
+    <p>&copy; 2026 FitLife. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // 테마 토글 로직
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const themeIcon = themeToggle.querySelector('.theme-icon');
+    const themeText = themeToggle.querySelector('.theme-text');
+
+    // 저장된 테마 불러오기
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    body.setAttribute('data-theme', savedTheme);
+    updateToggleUI(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateToggleUI(newTheme);
+    });
+
+    function updateToggleUI(theme) {
+      if (theme === 'dark') {
+        themeIcon.textContent = '☀️';
+        themeText.textContent = '라이트 모드';
+      } else {
+        themeIcon.textContent = '🌙';
+        themeText.textContent = '다크 모드';
+      }
+    }
+
+    // BMI 계산 함수
+    function calculateBMI() {
+      const height = parseFloat(document.getElementById('height').value) / 100;
+      const weight = parseFloat(document.getElementById('weight').value);
+      const resultDiv = document.getElementById('result');
+
+      if (!height || !weight || height <= 0 || weight <= 0) {
+        resultDiv.innerHTML = '⚠️ 올바른 값을 입력해주세요.';
+        resultDiv.classList.add('show');
+        return;
+      }
+
+      const bmi = (weight / (height * height)).toFixed(1);
+      let category = '';
+      let emoji = '';
+
+      if (bmi < 18.5) {
+        category = '저체중';
+        emoji = '📉';
+      } else if (bmi < 23) {
+        category = '정상 체중';
+        emoji = '✅';
+      } else if (bmi < 25) {
+        category = '과체중';
+        emoji = '⚠️';
+      } else if (bmi < 30) {
+        category = '비만 1단계';
+        emoji = '🔴';
+      } else {
+        category = '비만 2단계 이상';
+        emoji = '🚨';
+      }
+
+      resultDiv.innerHTML = `
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">${emoji}</div>
+        <div>당신의 BMI: <strong style="font-size: 1.5rem;">${bmi}</strong></div>
+        <div style="margin-top: 0.5rem;">분류: <strong>${category}</strong></div>
+      `;
+      resultDiv.classList.add('show');
+    }
+
+    // 부드러운 스크롤
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
