@@ -66,7 +66,7 @@
     header {
       background: var(--header-gradient);
       color: white;
-      padding: 1rem 0;
+      padding: 0.8rem 0;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -82,14 +82,9 @@
       align-items: center;
     }
 
-    .logo {
-      font-size: 1.8rem;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
-    .logo span {
-      color: #ffd700;
+    .logo img {
+      height: 50px;
+      display: block;
     }
 
     .nav-container {
@@ -139,18 +134,18 @@
       background: linear-gradient(var(--hero-overlay)),
                   url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1600') center/cover;
       color: white;
-      padding: 6rem 2rem;
+      padding: 4rem 2rem;
       text-align: center;
     }
 
     .hero h1 {
-      font-size: 3.5rem;
+      font-size: 3rem;
       margin-bottom: 1rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
 
     .hero p {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       margin-bottom: 2rem;
       max-width: 700px;
       margin-left: auto;
@@ -278,12 +273,17 @@
     }
 
     /* BMI 계산기 */
+    #bmi {
+      background: var(--bg-color);
+      padding-top: 2rem;
+    }
+
     .calculator {
       background: var(--calc-bg);
       color: white;
       border-radius: 20px;
       padding: 3rem;
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
@@ -332,9 +332,9 @@
 
     .result {
       margin-top: 1.5rem;
-      padding: 1.5rem;
+      padding: 2rem;
       background: rgba(255,255,255,0.2);
-      border-radius: 10px;
+      border-radius: 15px;
       text-align: center;
       font-size: 1.2rem;
       display: none;
@@ -342,6 +342,21 @@
 
     .result.show {
       display: block;
+    }
+
+    .partner-img-container {
+      position: relative;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    .partner-img {
+      width: 280px;
+      height: 280px;
+      border-radius: 20px;
+      object-fit: cover;
+      border: 6px solid rgba(255,215,0,0.6);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     }
 
     /* 영양 정보 */
@@ -402,6 +417,11 @@
       .section-title {
         font-size: 1.8rem;
       }
+
+      .partner-img {
+        width: 220px;
+        height: 220px;
+      }
     }
   </style>
 </head>
@@ -409,13 +429,15 @@
   <!-- 헤더 -->
   <header>
     <nav>
-      <div class="logo">Fit<span>Life</span> 💪</div>
+      <div class="logo">
+        <a href="#home"><img src="logo.png" alt="FitLife Platform"></a>
+      </div>
       <div class="nav-container">
         <ul class="nav-links">
+          <li><a href="#bmi">BMI 계산</a></li>
           <li><a href="#home">홈</a></li>
           <li><a href="#categories">카테고리</a></li>
           <li><a href="#tips">운동팁</a></li>
-          <li><a href="#bmi">BMI 계산</a></li>
           <li><a href="#nutrition">영양정보</a></li>
         </ul>
         <button class="theme-toggle" id="theme-toggle">
@@ -426,93 +448,12 @@
     </nav>
   </header>
 
-  <!-- 히어로 -->
-  <section class="hero" id="home">
-    <h1>건강한 삶의 시작, FitLife</h1>
-    <p>과학적이고 검증된 건강 정보로 당신의 라이프스타일을 변화시켜보세요. 오늘부터 더 나은 내일을 만들어갑니다.</p>
-    <a href="#categories" class="btn">시작하기 →</a>
-  </section>
-
-  <!-- 카테고리 -->
-  <section id="categories">
-    <div class="container">
-      <h2 class="section-title">건강 카테고리</h2>
-      <div class="categories">
-        <div class="category-card">
-          <div class="category-icon">🏋️</div>
-          <h3>근력 운동</h3>
-          <p>체계적인 웨이트 트레이닝으로 강한 몸을 만들어보세요.</p>
-        </div>
-        <div class="category-card">
-          <div class="category-icon">🏃</div>
-          <h3>유산소 운동</h3>
-          <p>심폐지구력 향상과 체지방 감량을 위한 유산소 가이드.</p>
-        </div>
-        <div class="category-card">
-          <div class="category-icon">🧘</div>
-          <h3>요가 & 스트레칭</h3>
-          <p>유연성과 마음의 평화를 동시에 얻는 운동법.</p>
-        </div>
-        <div class="category-card">
-          <div class="category-icon">🥗</div>
-          <h3>영양 관리</h3>
-          <p>균형 잡힌 식단으로 건강을 챙기는 방법.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 운동 팁 -->
-  <section class="tips-section" id="tips">
-    <div class="container">
-      <h2 class="section-title">운동 핵심 팁</h2>
-      <div class="tips-grid">
-        <div class="tip-card">
-          <h4>🔥 초보자를 위한 가이드</h4>
-          <ul>
-            <li>주 3회, 30분부터 시작하기</li>
-            <li>충분한 워밍업과 쿨다운</li>
-            <li>올바른 자세를 우선시할 것</li>
-            <li>점진적으로 강도 높이기</li>
-          </ul>
-        </div>
-        <div class="tip-card">
-          <h4>💪 근력 향상의 비밀</h4>
-          <ul>
-            <li>복합 운동(스쿼트, 데드리프트) 활용</li>
-            <li>점진적 과부하 원칙 적용</li>
-            <li>충분한 단백질 섭취 (체중 1kg당 1.6~2g)</li>
-            <li>주 2회 이상 같은 부위 자극</li>
-          </ul>
-        </div>
-        <div class="tip-card">
-          <h4>🏃‍♂️ 효과적인 다이어트</h4>
-          <ul>
-            <li>유산소 + 근력 운동 병행</li>
-            <li>하루 칼로리 10~20% 감량</li>
-            <li>충분한 수면 (7~8시간)</li>
-            <li>물 하루 2L 이상 마시기</li>
-          </ul>
-        </div>
-        <div class="tip-card">
-          <h4>😴 회복의 중요성</h4>
-          <ul>
-            <li>운동 후 48시간 휴식 필요</li>
-            <li>스트레칭으로 근육 이완</li>
-            <li>마사지 및 폼롤링 활용</li>
-            <li>스트레스 관리도 회복의 일부</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BMI 계산기 -->
+  <!-- BMI 계산기 (최상단 배치) -->
   <section id="bmi">
     <div class="container">
-      <h2 class="section-title">BMI 계산기</h2>
+      <h2 class="section-title">AI 건강 매칭 리포트</h2>
       <div class="calculator">
-        <h3>당신의 체질량지수와 매칭 이성을 확인해보세요</h3>
+        <h3>신체 스펙 입력하고 AI 파트너 찾기</h3>
         <div class="form-group">
           <label>성별</label>
           <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
@@ -532,8 +473,89 @@
           <label for="weight">몸무게 (kg)</label>
           <input type="number" id="weight" placeholder="예: 65">
         </div>
-        <button class="calc-btn" onclick="calculateBMI()">BMI 계산 및 이성 매칭</button>
+        <button class="calc-btn" onclick="calculateBMI()">지금 바로 매칭 결과 확인하기 →</button>
         <div class="result" id="result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 히어로 -->
+  <section class="hero" id="home">
+    <h1>데이터로 증명하는 변화</h1>
+    <p>과학적 알고리즘을 통한 BMI 분석과 당신의 라이프스타일에 최적화된 피트니스 솔루션을 제공합니다.</p>
+    <a href="#categories" class="btn">운동 가이드 보기</a>
+  </section>
+
+  <!-- 카테고리 -->
+  <section id="categories">
+    <div class="container">
+      <h2 class="section-title">전문가 추천 코스</h2>
+      <div class="categories">
+        <div class="category-card">
+          <div class="category-icon">🏋️</div>
+          <h3>근력 강화</h3>
+          <p>전신 협응력을 키우는 고강도 웨이트 트레이닝.</p>
+        </div>
+        <div class="category-card">
+          <div class="category-icon">🏃</div>
+          <h3>체지방 연소</h3>
+          <p>심박수 기반의 인터벌 유산소 트레이닝.</p>
+        </div>
+        <div class="category-card">
+          <div class="category-icon">🧘</div>
+          <h3>유연성 & 회복</h3>
+          <p>부상 방지를 위한 동적 스트레칭 가이드.</p>
+        </div>
+        <div class="category-card">
+          <div class="category-icon">🥗</div>
+          <h3>식단 영양학</h3>
+          <p>근성장과 다이어트를 위한 매크로 영양소 설계.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 운동 팁 -->
+  <section class="tips-section" id="tips">
+    <div class="container">
+      <h2 class="section-title">오늘의 운동 전략</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <h4>🔥 루틴 설계의 핵심</h4>
+          <ul>
+            <li>주기화 모델 적용하기</li>
+            <li>실패 지점까지의 강도 조절</li>
+            <li>RPE 지수 활용한 컨디션 체크</li>
+            <li>충분한 글리코겐 보충</li>
+          </ul>
+        </div>
+        <div class="tip-card">
+          <h4>💪 근성장 메커니즘</h4>
+          <ul>
+            <li>기계적 장력 극대화</li>
+            <li>대사적 스트레스 유도</li>
+            <li>단백질 합성 골든타임 활용</li>
+            <li>수면 중 호르몬 분비 최적화</li>
+          </ul>
+        </div>
+        <div class="tip-card">
+          <h4>🏃‍♂️ 효율적 감량 전략</h4>
+          <ul>
+            <li>기초대사량 대비 칼로리 설계</li>
+            <li>NEAT(비운동성 활동) 증가</li>
+            <li>고단백 저탄수화물 식단 병행</li>
+            <li>공복 유산소의 명암 이해</li>
+          </ul>
+        </div>
+        <div class="tip-card">
+          <h4>😴 완전한 휴식법</h4>
+          <ul>
+            <li>액티브 리커버리 활용</li>
+            <li>근막 이완 도구 사용</li>
+            <li>마그네슘 등 미네랄 섭취</li>
+            <li>정신적 스트레스 완화</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -541,37 +563,37 @@
   <!-- 영양 정보 -->
   <section class="nutrition-section" id="nutrition">
     <div class="container">
-      <h2 class="section-title">필수 영양소 가이드</h2>
+      <h2 class="section-title">영양 가이드라인</h2>
       <div class="nutrition-grid">
         <div class="nutrition-card">
           <div class="emoji">🍗</div>
           <h4>단백질</h4>
-          <p>근육 형성과 회복의 핵심. 닭가슴살, 계란, 두부 추천.</p>
+          <p>근조직 재건의 필수 요소. 육류, 생선, 대두 활용.</p>
         </div>
         <div class="nutrition-card">
           <div class="emoji">🍚</div>
-          <h4>탄수화물</h4>
-          <p>운동 에너지원. 현미, 고구마, 귀리 등 복합 탄수화물 섭취.</p>
+          <h4>복합 당질</h4>
+          <p>지속적인 에너지 공급. 현미, 오트밀 추천.</p>
         </div>
         <div class="nutrition-card">
           <div class="emoji">🥑</div>
-          <h4>건강한 지방</h4>
-          <p>호르몬 균형에 필수. 아보카도, 견과류, 올리브오일 활용.</p>
+          <h4>불포화 지방</h4>
+          <p>세포막 건강과 호르몬 합성의 기초.</p>
         </div>
         <div class="nutrition-card">
           <div class="emoji">🥦</div>
-          <h4>비타민 & 미네랄</h4>
-          <p>면역력과 신진대사. 다양한 채소와 과일 섭취 필수.</p>
+          <h4>파이토케미컬</h4>
+          <p>항산화 작용과 대사 기능 원활화.</p>
         </div>
         <div class="nutrition-card">
           <div class="emoji">💧</div>
-          <h4>수분</h4>
-          <p>대사 활동의 기본. 하루 1.5~2L의 물 섭취 권장.</p>
+          <h4>전해질 밸런스</h4>
+          <p>근수축과 신경 전달을 위한 수분 섭취.</p>
         </div>
         <div class="nutrition-card">
           <div class="emoji">🌾</div>
           <h4>식이섬유</h4>
-          <p>장 건강의 수호자. 채소, 통곡물, 콩류로 충분히 섭취.</p>
+          <p>인슐린 감수성 개선과 장내 환경 정화.</p>
         </div>
       </div>
     </div>
@@ -579,9 +601,7 @@
 
   <!-- 푸터 -->
   <footer>
-    <p><strong>FitLife</strong> - 당신의 건강한 라이프스타일 파트너</p>
-    <p>📧 contact@fitlife.com | 📞 02-1234-5678</p>
-    <p>&copy; 2026 FitLife. All Rights Reserved.</p>
+    <p>&copy; 2026 FitLife Platform. All Rights Reserved.</p>
   </footer>
 
   <script>
@@ -591,7 +611,6 @@
     const themeIcon = themeToggle.querySelector('.theme-icon');
     const themeText = themeToggle.querySelector('.theme-text');
 
-    // 저장된 테마 불러오기
     const savedTheme = localStorage.getItem('theme') || 'light';
     body.setAttribute('data-theme', savedTheme);
     updateToggleUI(savedTheme);
@@ -599,7 +618,6 @@
     themeToggle.addEventListener('click', () => {
       const currentTheme = body.getAttribute('data-theme');
       const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      
       body.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
       updateToggleUI(newTheme);
@@ -629,76 +647,112 @@
       }
 
       const bmi = (weight / (height * height)).toFixed(1);
+      const idealWeight = (22 * (height * height));
+      const weightDiff = Math.abs(weight - idealWeight);
+      
       let category = '';
       let emoji = '';
-      let partnerImg = '';
-      let partnerDesc = '';
-      let motivation = '';
       let score = 0;
-
+      let motivation = '';
+      
       if (bmi < 18.5) {
         category = '저체중';
         emoji = '📉';
-        score = 65;
-        motivation = '근력 운동을 통해 조금 더 탄탄한 몸을 만들면, 이 파트너와 함께 액티브한 활동을 즐기기에 최고일 거예요!';
+        score = Math.max(40, 70 - weightDiff * 2);
       } else if (bmi < 23) {
         category = '정상 체중';
         emoji = '✅';
-        score = 98;
-        motivation = '완벽한 매칭! 지금의 건강한 밸런스를 유지하며 파트너와 함께 아침 조깅을 시작해보는 건 어떨까요?';
+        score = Math.max(90, 100 - weightDiff);
       } else if (bmi < 25) {
         category = '과체중';
         emoji = '⚠️';
-        score = 80;
-        motivation = '조금만 더 식단과 운동에 신경 쓰면, 이 파트너와 함께 해변을 달리는 꿈이 현실이 될 수 있습니다!';
+        score = Math.max(60, 85 - weightDiff * 1.5);
       } else if (bmi < 30) {
         category = '비만 1단계';
         emoji = '🔴';
-        score = 60;
-        motivation = '이 파트너는 자기관리가 철저한 사람에게 큰 매력을 느낍니다. 오늘부터 30분 걷기부터 시작해볼까요?';
+        score = Math.max(40, 65 - weightDiff);
       } else {
         category = '비만 2단계 이상';
         emoji = '🚨';
-        score = 45;
-        motivation = '새로운 인생의 전환점이 필요합니다. 더 건강한 당신을 기다리는 이 파트너를 생각하며 힘내보세요!';
+        score = Math.max(20, 45 - weightDiff / 2);
       }
 
-      // 매칭 이성 설정 (Unsplash 고화질 피트니스 이미지)
-      if (gender === 'male') {
-        // 남성이면 여성 파트너 추천 (요가/운동하는 건강한 여성)
-        partnerImg = `https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&h=500&fit=crop&q=80`;
-        partnerDesc = '매일 아침 요가와 러닝을 즐기는 활발한 파트너';
+      // 파트너 레벨 결정 (5kg 차이마다 강력한 자극)
+      let level = Math.floor(weightDiff / 5);
+      if (level > 2) level = 2;
+
+      let partnerImg = '';
+      let partnerDesc = '';
+
+      const partners = {
+        female: [
+          {
+            img: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=800&h=800&fit=crop&q=80',
+            desc: '함께 가벼운 러닝을 즐길 수 있는 건강한 파트너'
+          },
+          {
+            img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=800&fit=crop&q=80',
+            desc: '철저한 자기관리로 다듬어진 에너제틱한 파트너'
+          },
+          {
+            img: 'https://images.unsplash.com/photo-1583454110551-21f2fa20ed3d?w=800&h=800&fit=crop&q=80',
+            desc: '최고의 피지컬을 지향하는 압도적인 운동 마니아 파트너'
+          }
+        ],
+        male: [
+          {
+            img: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=800&h=800&fit=crop&q=80',
+            desc: '균형 잡힌 신체로 함께 운동하기 좋은 든든한 파트너'
+          },
+          {
+            img: 'https://images.unsplash.com/photo-1491756589698-60a66270590a?w=800&h=800&fit=crop&q=80',
+            desc: '강력한 동기부여를 선사하는 자기관리 끝판왕 파트너'
+          },
+          {
+            img: 'https://images.unsplash.com/photo-1532009324734-20a7a5813719?w=800&h=800&fit=crop&q=80',
+            desc: '완벽한 피지컬을 보유한 최정상급 피트니스 파트너'
+          }
+        ]
+      };
+
+      const selectedPartner = gender === 'male' ? partners.female[level] : partners.male[level];
+      partnerImg = selectedPartner.img;
+      partnerDesc = selectedPartner.desc;
+
+      if (level === 0) {
+        motivation = '이미 훌륭한 신체를 가지고 계시네요! 파트너와 함께 건강한 라이프스타일을 유지해보세요.';
+      } else if (level === 1) {
+        motivation = '조금만 더 노력하면 이 파트너와 완벽한 케미를 보여줄 수 있습니다. 오늘부터 스쿼트 10개 더!';
       } else {
-        // 여성이면 남성 파트너 추천 (자기관리가 철저한 운동하는 남성)
-        partnerImg = `https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&h=500&fit=crop&q=80`;
-        partnerDesc = '철저한 식단과 웨이트 트레이닝으로 다져진 든든한 파트너';
+        motivation = '당신의 잠재력은 무궁무진합니다. 이 파트너가 당신의 변화된 모습을 기다리고 있어요. 지금 바로 움직이세요!';
       }
 
       resultDiv.innerHTML = `
         <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">${emoji}</div>
-        <div>당신의 BMI: <strong style="font-size: 1.5rem;">${bmi}</strong></div>
-        <div style="margin-top: 0.5rem;">분류: <strong>${category}</strong></div>
+        <div>현재 BMI: <strong style="font-size: 1.5rem;">${bmi}</strong> (${category})</div>
+        <div style="margin-top: 0.5rem; color: #ffd700;">적정 체중까지 약 <strong>${weightDiff.toFixed(1)}kg</strong> 남았습니다.</div>
         
-        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px dashed rgba(255,255,255,0.3);">
-          <div style="font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem; color: #ffd700;">
-            🔥 AI 라이프스타일 매칭 결과
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid rgba(255,255,255,0.2);">
+          <div style="font-weight: bold; font-size: 1.4rem; margin-bottom: 1.5rem; color: #ffd700;">
+            💖 당신의 AI 피트니스 파트너 매칭
           </div>
-          <div style="position: relative; display: inline-block; margin-bottom: 1rem;">
-            <img src="${partnerImg}" alt="Matching Partner" style="width: 200px; height: 200px; border-radius: 20px; object-fit: cover; border: 5px solid rgba(255,215,0,0.5); box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
-            <div style="position: absolute; bottom: 10px; right: -10px; background: #e94560; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
-              매칭률 ${score}%
+          <div class="partner-img-container">
+            <img src="${partnerImg}" alt="AI Partner" class="partner-img">
+            <div style="position: absolute; bottom: 15px; right: -15px; background: #e94560; color: white; padding: 8px 20px; border-radius: 30px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+              매칭 적합도 ${score.toFixed(0)}%
             </div>
           </div>
-          <div style="font-weight: bold; margin-bottom: 0.5rem;">"${partnerDesc}"</div>
-          <p style="font-size: 0.95rem; line-height: 1.5; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px; margin-top: 1rem;">
+          <div style="font-weight: bold; margin: 1.5rem 0 0.5rem; font-size: 1.1rem;">"${partnerDesc}"</div>
+          <p style="font-size: 1rem; line-height: 1.6; background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px; margin-top: 1rem; border-left: 4px solid #ffd700;">
             ${motivation}
           </p>
-          <div style="margin-top: 1rem; font-size: 0.85rem; color: #ffd700; font-style: italic;">
-            * 이 파트너는 당신과 함께 운동할 준비가 되어 있습니다!
+          <div style="margin-top: 1.5rem; font-weight: bold; color: #ffd700;">
+            🚀 지금 바로 이 파트너와 어울리는 몸을 만들어보세요!
           </div>
         </div>
       `;
       resultDiv.classList.add('show');
+      resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     // 부드러운 스크롤
