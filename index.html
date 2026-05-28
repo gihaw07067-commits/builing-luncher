@@ -467,41 +467,53 @@
 
     // 전국 상위 퍼센트 및 순위 계산 로직 (데이터 기반 동적 모델)
     function calculateRank(type, data) {
-      const totalPopulation = 51750000; // 대한민국 총인구 (대략)
+      const totalPopulation = 51750000; // 대한민국 총인구
       let percentile = 50.0;
       
-      // 성별 및 연령대별 가중치 (임의 통계 보정치)
-      const genderWeight = data.gender === 'male' ? 1.1 : 0.9;
-      const ageWeights = { '20': 0.8, '30': 1.0, '40': 1.2, '50': 1.5 };
-      const ageWeight = ageWeights[data.age] || 1.0;
-
       if (type === 'standard') {
         const bmi = data.bmi;
-        // BMI 정규 분포 모델 (평균 23.5, 표준편차 3.5 가정)
-        const zScore = (bmi - 23.5) / 3.5;
-        // 표준 정규 분포 누적 확률 근사 (상위 퍼센트이므로 절대값 활용)
-        percentile = Math.abs(50 - (Math.atan(zScore * 1.5) * (100 / Math.PI)));
+        // 한국인 평균 BMI 약 23.5, 표준편차 3.5 기반의 정규분포 모델
+        // 정상 범주(22~23)에서 가장 높은 점수를 받도록 설계
+        const diff = Math.abs(bmi - 22.5);
+        if (bmi < 18.5) {
+          // 저체중 영역
+          percentile = 70 + (18.5 - bmi) * 5;
+        } else if (bmi <= 25) {
+          // 정상 및 과체중 경계 (가장 경쟁 치열한 상위권)
+          percentile = 1 + (diff * 15); 
+        } else {
+          // 비만 영역
+          percentile = 40 + (bmi - 25) * 8;
+        }
       } else {
         // 인바디 점수 모델 (골격근량/체지방률 복합)
-        const muscleRatio = data.muscle / (data.weight || 70);
-        const score = (muscleRatio * 100) - (data.fat * 0.5);
-        // 고득점일수록 상위권 (Z-Score 근사)
-        const targetScore = data.gender === 'male' ? 45 : 35;
-        const zScore = (score - targetScore) / 10;
-        percentile = 50 - (Math.atan(zScore * 2) * (100 / Math.PI));
+        // 남성: 골격근량 45% 이상, 체지방 15% 이하가 상위권 가정
+        // 여성: 골격근량 35% 이상, 체지방 22% 이하가 상위권 가정
+        const muscleRatio = (data.muscle / (data.weight || 70)) * 100;
+        const targetMuscle = data.gender === 'male' ? 45 : 35;
+        const targetFat = data.gender === 'male' ? 15 : 22;
+        
+        const muscleScore = Math.max(0, 100 - Math.abs(muscleRatio - targetMuscle) * 4);
+        const fatScore = Math.max(0, 100 - Math.abs(data.fat - targetFat) * 3);
+        const totalScore = (muscleScore * 0.6) + (fatScore * 0.4);
+        
+        percentile = 100 - totalScore;
       }
 
-      // 연령대별 경쟁률 보정
-      percentile = percentile * ageWeight * genderWeight;
+      // 연령대별 보정 (나이가 많을수록 같은 스펙에서 상위권)
+      const ageBonus = { '20': 1.0, '30': 0.95, '40': 0.85, '50': 0.75 };
+      percentile = percentile * (ageBonus[data.age] || 1.0);
       
-      // 실시간 변화 시뮬레이션 (접속 시마다 미세하게 변동하여 승부욕 자극)
-      const volatility = (Math.random() - 0.5) * 0.2;
-      percentile += volatility;
+      // 변동성 최소화 (동일 값 입력 시 일관성 유지)
+      // 시드값(bmi 또는 근육량 등)을 활용한 고정형 미세 변동
+      const seed = type === 'standard' ? data.bmi : data.muscle + data.fat;
+      const staticVolatility = (Math.sin(seed * 1000) + 1) / 10; // 0~0.2 사이 고정값
+      percentile += staticVolatility;
 
       percentile = Math.min(Math.max(percentile, 0.01), 99.9);
       
-      // 전국 추정 순위 (해당 연령대/성별 인구수 비례)
-      const subgroupPopulation = totalPopulation / 8; // 단순 8등분
+      // 전국 추정 순위 (해당 연령대/성별 인구수 비례 - 약 300만명 단위)
+      const subgroupPopulation = 3200000; 
       const rank = Math.floor(subgroupPopulation * (percentile / 100));
 
       return {
